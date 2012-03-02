@@ -6,12 +6,13 @@ task :default => :build
 desc "Build the book from start to finish"
 task :build => [:fetch_sources, :generate_chapters, :convert_formats] 
 
-desc "Fetch the source mbox from bogomips.org"
-task :fetch_sources  do
-  FileUtils.mkdir_p 'src'
-  sh "curl #{MboxSource} > #{MboxPath}.gz"
-  sh "gunzip #{MboxPath}.gz"
+directory 'src'
+file MboxPath => 'src' do
+  sh "curl #{MboxSource} > #{MboxPath}"
 end
+
+desc "Fetch the source mbox from bogomips.org"
+task :fetch_sources => MboxPath
 
 desc "Parse the source and generate the chapter files"
 task :generate_chapters do
