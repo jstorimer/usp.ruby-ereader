@@ -18,6 +18,7 @@ end
 
 desc "Parse the source and generate the chapter files"
 task :generate_chapters do
+  puts 'Generating chapters...'
   require_relative 'lib/mboxparser'
 
   mailbox = Mbox.new MboxPath
