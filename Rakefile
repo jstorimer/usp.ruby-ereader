@@ -1,10 +1,10 @@
-require 'bundler/setup'
-
 require 'rake/clean'
 CLEAN.include FileList['src']
 
 MboxSource = 'http://bogomips.org/usp.ruby/archives/2011.mbox.gz'
 MboxPath = 'src/usp.ruby.mbox.gz'
+
+task :default => :build
 
 desc "Build the book from start to finish"
 task :build => [:clean, :fetch_sources, :generate_chapters, :convert_formats] 
