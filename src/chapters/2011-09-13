@@ -1,4 +1,4 @@
-
+The Unix object model (as seen from user space)
 If you're a Rubyist, you may already be familiar with object-oriented
 designs.  A running Unix/Unix-like kernel exposes two primary types of
 objects to userspace:

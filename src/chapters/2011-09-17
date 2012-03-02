@@ -1,4 +1,4 @@
-
+The Ruby IO class
 The IO class wraps file descriptors as Ruby objects and provides
 instance methods which wrap system calls.  Each IO object wraps one OS
 file descriptor[1].  IO also provides userspace buffering to avoid

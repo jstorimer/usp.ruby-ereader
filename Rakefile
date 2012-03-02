@@ -35,11 +35,12 @@ task :generate_chapters do
     mail.header['Subject'].match /^Re:/
   }
 
-  FileUtils.mkdir_p 'chapters'
+  FileUtils.mkdir_p 'src/chapters'
+
   articles.each do |article|
     # TODO: Pull in the replies and render those too
     date = Date.parse(article.header['Date']).to_s
-    File.open("chapters/#{date}", 'w') do |fh|
+    File.open("src/chapters/#{date}", 'w') do |fh|
       # Title
       fh.write article.header['Subject']
 

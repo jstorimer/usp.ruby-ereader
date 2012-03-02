@@ -1,4 +1,4 @@
-
+/Avoiding/ system calls
 Eric Wong <normalperson@yhbt.net> wrote:
 > As mentioned before, syscalls are the interface user space interacts
 > with kernel space.  When a user space application makes a syscall,

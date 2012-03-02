@@ -1,4 +1,4 @@
-
+Unix time and the Ruby Time class
 The Unix epoch is defined as January 1, 1970, 00:00:00 UTC (Coordinated
 Universal Time[1]).  Unix systems return the time in seconds as a signed
 integer relative to the Unix epoch.  Negative numbers are interpreted as

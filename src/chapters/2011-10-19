@@ -1,4 +1,4 @@
-
+IO#dup and the dup(2) system call
 IO#dup is Object#dup in Ruby: it creates a shallow copy of an
 existing object.  To create a shallow copy, the IO#initialize_copy
 callback method performs the dup(2) syscall on the underlying file

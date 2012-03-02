@@ -1,4 +1,4 @@
-
+An introduction to the Unix pipe
 The Unix pipe is the first example of an anonymous file we will cover.
 
 Unlike regular files and directories, anonymous files do not exist on

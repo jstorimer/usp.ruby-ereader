@@ -1,4 +1,4 @@
-
+Regular files and metadata
 Regular files on a persistent filesystem are pointers/links to internal
 metadata known as inodes.  The implementation details of inodes vary
 between various filesystems and is usually not the concern of user
