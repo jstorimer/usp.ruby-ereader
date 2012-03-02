@@ -1,3 +1,5 @@
 source :rubygems
 
-gem 'ruby-debug19'
+gem 'redcarpet'
+gem 'unix_utils'
+

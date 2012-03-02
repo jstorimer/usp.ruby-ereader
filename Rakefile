@@ -17,9 +17,12 @@ task :fetch_sources => MboxPath
 desc "Parse the source and generate the chapter files"
 task :generate_chapters do
   puts 'Generating chapters...'
+
+  require 'redcarpet'
+  require 'unix_utils'
   require_relative 'lib/mboxparser'
 
-  mailbox = Mbox.new MboxPath
+  mailbox = Mbox.new UnixUtils.gunzip(MboxPath)
   mailbox.parse
   mailbox.map(&:parse)
 
@@ -38,13 +41,13 @@ task :generate_chapters do
   articles.each do |article|
     # TODO: Pull in the replies and render those too
     date = Date.parse(article.header['Date']).to_s
-    File.open("src/chapters/#{date}", 'w') do |fh|
+    File.open("src/chapters/#{date}.html", 'w') do |fh|
       # Title
-      fh.write article.header['Subject']
+      fh.puts "<h1>#{article.header['Subject']}</h1>\n"
 
       # TODO: Try rendering it in a <pre> tag
       # Body
-      fh.write article.body.join
+      fh.puts Redcarpet.new(article.body.join).to_html
     end
   end
 end
