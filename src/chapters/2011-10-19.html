@@ -1,0 +1,83 @@
+<h1>IO#dup and the dup(2) system call</h1>
+<p>IO#dup is Object#dup in Ruby: it creates a shallow copy of an
+existing object.  To create a shallow copy, the IO#initialize_copy
+callback method performs the dup(2) syscall on the underlying file
+descriptor the IO object wraps.</p>
+
+<p>Like Object#dup in Ruby, dup(2) is a shallow clone that does not copy
+the underlying open file object in the kernel, but creates a new
+reference to an existing kernel object.</p>
+
+<p>Thus, two (or more) file descriptors in the same process can refer
+to the same open file in the kernel.</p>
+
+<p>Before calling IO#dup, we have a 1:1:1 relationship:</p>
+
+<ul>
+<li>one Ruby IO object</li>
+<li>one file descriptor</li>
+<li><p>one open file object in the kernel</p>
+
+<p>[Ruby]    user space   |  kernel space</p>
+
+<hr>
+
+<pre><code>                    |
+</code></pre>
+
+<p>io_orig ----------- fd[orig] ----&gt; file object
+                        |</p>
+
+<hr>
+
+<p>(file descriptors (fd) are the bridge here kernel and user space)</p></li>
+</ul>
+
+<p>After we call IO#dup, we have two 2:2:1 relationship:</p>
+
+<ul>
+<li>two Ruby IO objects</li>
+<li>two file descriptors</li>
+<li><p>one file object in the kernel</p>
+
+<p>[Ruby]    user space   |  kernel space</p>
+
+<hr>
+
+<pre><code>                    |
+</code></pre>
+
+<p>io<em>orig ----------- fd[orig] -\
+                        |       &gt;---&gt; file object
+ io</em>copy ----------- fd[copy] -/
+                        |</p>
+
+<hr></li>
+</ul>
+
+<p>IO#dup can be called on the same IO object any number times, so there
+may be an N:N:1 relationship as long as the process (and system)
+resource limits are not exceeded.</p>
+
+<p>Most kernel-level (but not user space) changes to one IO object are
+immediately visible in the IO object(s) it was copied from (or copied
+to).</p>
+
+<h2>Effect on IPC</h2>
+
+<p>IO#dup means IO#close / close(2) will only remove a <em>reference</em> to the
+file object in the kernel.  Only when the last file descriptor for a
+given file object is closed is the actual file object closed and
+released in the kernel.</p>
+
+<p>For applications relying on receiving an end-of-file condition (from a
+socket or pipe), IO#dup[1] can (sometimes inadverdantly) prevent the
+end-of-file condition from being reached in the reader.</p>
+
+<p>[1] - and similar functions, like fork()</p>
+
+<p>License: GPLv3 (or later, at the discretion of Eric Wong)</p>
+
+<h2>         http://www.gnu.org/licenses/gpl-3.0.txt</h2>
+
+<p>Eric Wong</p>

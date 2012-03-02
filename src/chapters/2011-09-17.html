@@ -1,0 +1,56 @@
+<h1>The Ruby IO class</h1>
+<p>The IO class wraps file descriptors as Ruby objects and provides
+instance methods which wrap system calls.  Each IO object wraps one OS
+file descriptor[1].  IO also provides userspace buffering to avoid
+system calls and utility methods to make a programmer's life easier.</p>
+
+<p>C programmers may find the Ruby IO class analogous to the (opaque)
+&quot;FILE&quot; struct in stdio.</p>
+
+<p>IO is often used via subclasses:</p>
+
+<ul>
+<li>File class is mostly intended for regular files</li>
+<li>TCPSocket for TCP sockets</li>
+<li>UNIXSocket for UNIX domain sockets</li>
+<li>UDPSocket for UDP sockets
+...</li>
+</ul>
+
+<p>All of those classes are based on the IO class and wrap an integer
+file descriptor.</p>
+
+<h2>Layers of Buffering</h2>
+
+<p>There are at least four distinct layers of buffering within a machine.</p>
+
+<pre><code>Application buffers     - what your application sees
+Library buffers         - implemented by Ruby or libc
+----------------- kernel-user space boundary -----------------
+Kernel software buffers
+Hardware buffers
+</code></pre>
+
+<p>Buffers may be implemented for both reading and writing.</p>
+
+<p>The Ruby IO class can do the following:</p>
+
+<ul>
+<li>accept application buffers from the user (IO#write)</li>
+<li>return application buffers to the user (IO#read)</li>
+<li>manage library buffers internally</li>
+<li>copy (and remove) library buffers to kernel buffers</li>
+<li>(hopefully) force kernel and hardware buffers to storage/network</li>
+</ul>
+
+<p>We will cover how to use/influence/avoid them individually as we
+go further.  For now, just know they exist and what IO does.</p>
+
+<p>[1] - Multiple IO objects may wrap a single file descriptor, but
+      that is often a bad idea (to be explained later :)</p>
+
+<p>License: GPLv3 (or later, at the discretion of Eric Wong)</p>
+
+<h2>         http://www.gnu.org/licenses/gpl-3.0.txt</h2>
+
+<p>Eric Wong</p>

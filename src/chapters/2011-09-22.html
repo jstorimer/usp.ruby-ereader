@@ -1,0 +1,63 @@
+<h1>An introduction to the Unix pipe</h1>
+<p>The Unix pipe is the first example of an anonymous file we will cover.</p>
+
+<p>Unlike regular files and directories, anonymous files do not exist on
+the filesystem and do not persist across reboots.  Only the process that
+creates the anonymous file (and its descendants) can access anonymous
+files.  Anonymous files only persist until the last process using it
+closes it.</p>
+
+<p>At its heart, the Unix pipe is just like a pipe in plumbing, a one-way
+buffer for transporting payload from one end to another.</p>
+
+<p>It is implemented as a circular ring buffer in the kernel:</p>
+
+<pre><code>              user space  | kernel space
+-----------------------------------------------
+                          |
+  data in --&gt; fd[writer] -&gt;- file[writer] --&gt;\
+                          |                   \
+                          |                [buffer]
+                          |                   /
+ data out &lt;-- fd[reader] -&lt;- file[reader] &lt;--/
+                          |
+</code></pre>
+
+<p>The buffer is created by the pipe(2) system call and persists until both
+files are closed.  In Ruby, the IO.pipe method calls pipe(2)
+and returns an array of two Ruby IO objects, a reader and writer:</p>
+
+<pre><code>reader, writer = IO.pipe # kernel creates internal buffer
+</code></pre>
+
+<p>Writing can be accomplished by making the write(2) syscall, the writer
+IO object should default to IO#sync=true at creation.</p>
+
+<pre><code>writer.write(&quot;HELLO&quot;)
+</code></pre>
+
+<p>Reading can be accomplished by making the read(2) syscall.</p>
+
+<pre><code>reader.read(5)  # =&gt; &quot;HELLO&quot;
+</code></pre>
+
+<p>Finally, the kernel memory for the buffer is released after both
+file objects (through file descriptors and IO) are closed:</p>
+
+<pre><code>writer.close
+reader.close
+# Kernel frees the buffer
+</code></pre>
+
+<p>As with regular files, pipes operate on byte streams and leaves
+higher-level functionality (like encoding) to user space.</p>
+
+<p>Pipes also have important atomicity requirements standardized by POSIX.
+Given the importance of pipes in Unix programming, we will revisit and
+give pipes much more coverage in the future.</p>
+
+<p>License: GPLv3 (or later, at the discretion of Eric Wong)</p>
+
+<h2>         http://www.gnu.org/licenses/gpl-3.0.txt</h2>
+
+<p>Eric Wong</p>

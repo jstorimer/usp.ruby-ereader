@@ -1,0 +1,103 @@
+<h1>Unix processes and their attributes</h1>
+<p>Processes are kernel objects that run user space code.  As we've
+established before, each Unix process is identified by an integer
+process identifer (PID) and has a file descriptor table.</p>
+
+<h2>PIDs</h2>
+
+<p>Each process knows two PIDs: its own and its parent's (PPID).</p>
+
+<p>Process.pid and $$ are wrappers for the getpid(2) syscall and
+Process.ppid is a wrapper for getppid(2).  While the PID of a process
+never changes, its parent PID (PPID) may change.</p>
+
+<h2>$0 / $PROGRAM_NAME</h2>
+
+<p>Each process has a name, this variable may be reassigned to change
+the name of this process in the output in tools like ps(1).</p>
+
+<p>Ruby does not expose $EXECUTABLE<em>NAME ($^X) like Perl does, however
+$PROGRAM</em>NAME is set to the executable name for Ruby programs at
+startup.</p>
+
+<h2>ARGV</h2>
+
+<p>This is an Array of command-line arguments given to a process.  ARGV[0]
+in Ruby is the first argument given to the executable, not the
+executable name.  Thus &quot;ARGV[0]&quot; in Ruby is &quot;argv[1]&quot; to C programmers.</p>
+
+<p>Modifying this array will not affect the name of the process in tools
+like ps(1).  Command-line option parsing libraries like 'optparse' and
+'getoptlong' in the Ruby standard library may modify ARGV.</p>
+
+<h2>Signal mask/handlers</h2>
+
+<p>Ruby implementations have internal system-level signal handlers that may
+later dispatch Ruby code (registered via Signal.trap).  Signal handlers
+written in Ruby are not subject to the limitations of system-level
+signal handlers.</p>
+
+<h2>ENV</h2>
+
+<p>This Hash-like object holds process environment variables.
+Environment variables are global to the process and are used to share
+information with system libraries and child processes in a
+language-independent manner.</p>
+
+<p>Null-terminated C strings are mapped to Ruby Strings in both the keys
+and values of this Hash-like object.</p>
+
+<p>While the system environment appears Hash-like, but it is not exposed as
+a hash to user space, so it does not have the same
+performance/algorithmic complexity as a Ruby Hash.</p>
+
+<h2>Working directory (Dir.pwd, Dir.chdir)</h2>
+
+<p>All processes have a working directory it runs in.</p>
+
+<h2>Process.times</h2>
+
+<p>Each process keeps track of CPU time spent in user space and the system
+(kernel) as well as the accumulated times of its children.
+Process.times is used to implement the Benchmark module in the Ruby
+standard library.</p>
+
+<h2>Usage counters (getrusage(2))</h2>
+
+<p>There is no Ruby API for getrusage(2), unfortunately, however some GC
+implementations may use it to provide profiling statistics.</p>
+
+<h2>Process.getrlimit / Process.setrlimit</h2>
+
+<p>These get and set process resource limits such as the maximum number
+of open file descriptors, resident set size, niceness, CPU time, etc.
+They are wrappers for the respective getrlimit(2) and setrlimit(2)
+syscalls.</p>
+
+<h2>User IDs / Group IDs</h2>
+
+<p>Each process has a real, effective and saved UID and GIDs.</p>
+
+<p>Process::UID.change<em>privilege and Process::GID.change</em>privilege are the
+most portable and easiest ways to change the UID(s) and GID(s) of a
+process.</p>
+
+<h2>umask (File.umask)</h2>
+
+<p>The umask is the file mode creation mask of the process.  This governs
+the filesystem permissions of newly-created files (File.open) and
+directories (Dir.mkdir).</p>
+
+<p>(I don't plan to write much about Unix credentials/permissions, if
+ anybody else wants to contribute an article it would be greatly
+ appreciated.  It's not a subject that's ever interested me.</p>
+
+<p>On the other hand, part of me dies whenever I see a directory
+ tree where somebody ran &quot;chmod -R 777 .&quot; on because they didn't
+ understand Unix permissions...)</p>
+
+<p>License: GPLv3 (or later, at the discretion of Eric Wong)</p>
+
+<h2>         http://www.gnu.org/licenses/gpl-3.0.txt</h2>
+
+<p>Eric Wong</p>
