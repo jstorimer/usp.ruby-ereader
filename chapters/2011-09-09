@@ -1,0 +1,62 @@
+
+This will be the "separate mailing list" mentioned in my original post:
+
+  http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/387469
+  Message-ID: <20110906230016.GC12574@dcvr.yhbt.net>
+
+-----------------------------------------------------------------------
+
+I would like to do a series of mailing list posts on the subject of Unix
+systems programming in Ruby.  I only intend to cover standardized,
+POSIX-compliant features of the standard Ruby distribution.  No
+extensions or Linux-only parts.
+
+Is there anybody who would NOT want these posts in ruby-talk?
+
+I could do this on a separate mailing list, but I think it'll be
+beneficial to a wider audience in ruby-talk.  I will prefix subjects
+with "[USP]" for ease-of-filtering.  I'll start posting in a week or two
+if there are no objections.  I'll try to space the posts so they're
+several days apart and allow time for questions/clarifications.
+
+I don't consider myself a great writer nor programmer, but several folks
+expressed interest in learning this subject to me directly.  I don't
+know if anybody else is willing to teach this subject or contribute, but
+if I'm to do it, it'll be over my preferred medium: plain-text email[1].
+
+Most people would start a blog/wiki, but I dislike dealing with _any_
+browsers/formatting/layout/presentation, so absolutely no
+markup/markdown/troff/textile if I'm to do this.  I'm interested in
+reader feedback and contributions; and (plain-text, minimally quoted)
+email is great for that.  I will not use anything other than plain-text
+email to interact with readers/editors/contributors.
+
+I will provide downloadable mbox archives of all posts (and replies).
+
+All of my posts will be licensed under the GPLv3, but code examples will
+be all-permissive and reusable freely without attribution.
+
+If anybody wants to take mailing list posts and make a website/wiki or
+even publish a book so more people can read it, please do so!  The GPLv3
+protects readers who circumvent DRM if distributed in proprietary
+formats.  Editorial help to fix/correct things will be greatly
+appreciated.
+
+I request (but cannot enforce) my name/likeness NOT be used in promoting
+any websites/books/etc...  I do NOT want recognition, so you can (and
+are encouraged to) hide/bury my name while respecting the GPL and take
+_all_ the credit for making it presentable to a non-mailing-list-reading
+audience.  I will not accept any payment/donations/gifts from this, you
+can make all the money you can from selling this (the GPL allows it).
+
+All I want from this is more people to understand Unix systems
+programming (and to avoid all HTML/browsers/forms while doing it).
+
+Thanks for reading!
+
+
+[1] - includes 7-bit clean ASCII art that works in any terminal :)
+
+-- 
+Eric Wong
+
