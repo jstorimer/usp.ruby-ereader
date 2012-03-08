@@ -38,9 +38,9 @@ task :generate_chapters do
     mail.header['From'].include?('Eric Wong')
   }
 
-  # Reject replies
+  # Reject replies and fwds
   articles = erics.reject { |mail|
-    mail.header['Subject'].match /^Re:/
+    mail.header['Subject'].match /^(Re|Fwd):/
   }
 
   FileUtils.mkdir_p 'src/chapters'
