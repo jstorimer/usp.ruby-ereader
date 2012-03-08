@@ -1,3 +1,7 @@
+require 'rake/clean'
+CLEAN.include 'src'
+CLEAN.include 'books'
+
 MboxSource = 'http://bogomips.org/usp.ruby/archives/2011.mbox.gz'
 MboxPath = 'src/usp.ruby.mbox.gz'
 
