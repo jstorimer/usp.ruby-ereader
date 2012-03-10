@@ -78,26 +78,34 @@ task :epub do
   require 'nokogiri'
   require 'date'
 
-  epub = EeePub.make do
-    title      'usp.ruby Archives'
-    creator    'Eric Wong'
-    publisher  'Jesse Storimer'
-    date       Date.today.to_s
-    identifier 'http://bogomips.org/usp.ruby/README', :scheme => 'URL'
-    uid        'http://bogomips.org/usp.ruby/README'
+  epub = EeePub.make do |epub|
+    epub.title      'usp.ruby Archives'
+    epub.creator    'Eric Wong'
+    epub.publisher  'Jesse Storimer'
+    epub.date       Date.today.to_s
+    epub.identifier 'http://bogomips.org/usp.ruby/README', :scheme => 'URL'
+    epub.uid        'http://bogomips.org/usp.ruby/README'
 
     #cover_page ''
-    #toc_page   ''
 
-    files      Dir['src/chapters/*.html']
+    epub.files      Dir['src/chapters/*.html']
 
-    nav(Dir['src/chapters/*.html'].map do |chapter|
+    navigation_map = Dir['src/chapters/*.html'].map do |chapter|
       content = File.read(chapter)
       html = Nokogiri(content)
       title = html.css('h1').first.text
 
       {:label => title, :content => File.basename(chapter)}
-    end.to_a)
+    end.to_a
+
+    epub.nav navigation_map
+
+    File.open('src/toc.html', 'w') do |fh|
+      toc_template = ERB.new(File.read('lib/toc.erb'))
+      fh.write toc_template.result(binding)
+    end
+
+    epub.toc_page 'src/toc.html'
   end
 
   epub.save('books/usp.ruby.epub')
